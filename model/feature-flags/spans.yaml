@@ -1,0 +1,23 @@
+groups:
+  - id: attributes.feature_flag.evaluation.result
+    type: attribute_group
+    stability: development
+    display_name: Feature Flag Evaluation Result Span Attributes
+    brief: >
+      Defines span attributes for recording feature flag evaluation results directly on spans.
+    note: |
+      Feature flag evaluations are typically recorded as events (see `event.feature_flag.evaluation`),
+      which allows correlating evaluation details with the span they occurred on. However, events
+      are not accessible to stateless span processors (such as those generating metrics from spans),
+      making it impossible to split metrics by flag value without external state.
+
+      The `feature_flag.evaluation.result.<key>` template attributes address this gap by embedding
+      flag evaluation results directly on the span as attributes, enabling use cases like splitting
+      span-derived metrics by feature flag value in a collector processor.
+
+      Instrumentation that records `feature_flag.evaluation.result.<key>` attributes SHOULD also
+      emit corresponding `feature_flag.evaluation` events unless doing so would be redundant or
+      the events are intentionally omitted.
+    attributes:
+      - ref: feature_flag.evaluation.result
+        requirement_level: opt_in

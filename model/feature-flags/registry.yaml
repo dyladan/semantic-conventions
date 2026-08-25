@@ -105,3 +105,22 @@ groups:
         brief: >
           A message providing more detail about an error that occurred during feature flag evaluation in human-readable form.
         examples: ["Unexpected input type: string", "The user has exceeded their storage quota"]
+      - id: feature_flag.evaluation.result
+        type: template[string]
+        stability: development
+        brief: >
+          The result of a feature flag evaluation, `<key>` being the feature flag key, the value being the evaluated flag value converted to a string.
+        note: |
+          This template attribute is intended for use on spans when it is not possible to correlate flag evaluation
+          events with their parent span using conventional event-based approaches, such as in stateless span
+          processors generating metrics from spans.
+
+          The `<key>` MUST be the same value as `feature_flag.key` for the corresponding evaluation.
+          The name `feature_flag.evaluation.result` is intentionally distinct from the `feature_flag.result.*`
+          attribute family to avoid collisions: a flag literally named `value` or `variant` would otherwise
+          produce `feature_flag.result.value` or `feature_flag.result.variant`, colliding with existing defined attributes.
+
+          Non-string flag values (boolean, number, object) MUST be converted to their string representation.
+          For example, a boolean flag `dark-mode` evaluated to `true` SHOULD be recorded as the
+          `feature_flag.evaluation.result.dark-mode` attribute with value `"true"`.
+        examples: ["red", "true", "3"]
