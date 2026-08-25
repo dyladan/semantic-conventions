@@ -16,7 +16,7 @@ This document defines attributes for Feature Flags.
 | --- | --- | --- | --- | --- |
 | <a id="feature-flag-context-id" href="#feature-flag-context-id">`feature_flag.context.id`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | The unique identifier for the flag evaluation context. For example, the targeting key. | `5157782b-2203-4c80-a857-dbbd5e7761db` |
 | <a id="feature-flag-error-message" href="#feature-flag-error-message">`feature_flag.error.message`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | A message providing more detail about an error that occurred during feature flag evaluation in human-readable form. | `Unexpected input type: string`; `The user has exceeded their storage quota` |
-| <a id="feature-flag-evaluation-result" href="#feature-flag-evaluation-result">`feature_flag.evaluation.result.<key>`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The result of a feature flag evaluation, `<key>` being the feature flag key, the value being the evaluated flag value converted to a string. [1] | `red`; `true`; `3` |
+| <a id="feature-flag-evaluation-result" href="#feature-flag-evaluation-result">`feature_flag.evaluation.result.<key>`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The result of a feature flag evaluation, `<key>` being the feature flag key, the value being the variant if available, otherwise the evaluated flag value converted to a string. [1] | `red`; `true`; `3` |
 | <a id="feature-flag-key" href="#feature-flag-key">`feature_flag.key`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | The lookup key of the feature flag. | `logo-color` |
 | <a id="feature-flag-provider-name" href="#feature-flag-provider-name">`feature_flag.provider.name`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | Identifies the feature flag provider. | `Flag Manager` |
 | <a id="feature-flag-result-reason" href="#feature-flag-result-reason">`feature_flag.result.reason`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | The reason code which shows how a feature flag value was determined. | `static`; `targeting_match`; `error`; `default` |
@@ -34,8 +34,10 @@ The name `feature_flag.evaluation.result` is intentionally distinct from the `fe
 attribute family to avoid collisions: a flag literally named `value` or `variant` would otherwise
 produce `feature_flag.result.value` or `feature_flag.result.variant`, colliding with existing defined attributes.
 
+If the feature flag provider supplies a variant or equivalent concept, the variant MUST be used as the
+attribute value. The evaluated flag value SHOULD only be used when no variant is available.
 Non-string flag values (boolean, number, object) MUST be converted to their string representation.
-For example, a boolean flag `dark-mode` evaluated to `true` SHOULD be recorded as the
+For example, a boolean flag `dark-mode` with no variant evaluated to `true` SHOULD be recorded as the
 `feature_flag.evaluation.result.dark-mode` attribute with value `"true"`.
 
 **[2] `feature_flag.result.value`:** With some feature flag providers, feature flag results can be quite large or contain private or sensitive details.

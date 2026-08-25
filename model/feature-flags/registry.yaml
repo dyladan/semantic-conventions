@@ -109,7 +109,8 @@ groups:
         type: template[string]
         stability: development
         brief: >
-          The result of a feature flag evaluation, `<key>` being the feature flag key, the value being the evaluated flag value converted to a string.
+          The result of a feature flag evaluation, `<key>` being the feature flag key, the value being the variant
+          if available, otherwise the evaluated flag value converted to a string.
         note: |
           This template attribute is intended for use on spans when it is not possible to correlate flag evaluation
           events with their parent span using conventional event-based approaches, such as in stateless span
@@ -120,7 +121,9 @@ groups:
           attribute family to avoid collisions: a flag literally named `value` or `variant` would otherwise
           produce `feature_flag.result.value` or `feature_flag.result.variant`, colliding with existing defined attributes.
 
+          If the feature flag provider supplies a variant or equivalent concept, the variant MUST be used as the
+          attribute value. The evaluated flag value SHOULD only be used when no variant is available.
           Non-string flag values (boolean, number, object) MUST be converted to their string representation.
-          For example, a boolean flag `dark-mode` evaluated to `true` SHOULD be recorded as the
+          For example, a boolean flag `dark-mode` with no variant evaluated to `true` SHOULD be recorded as the
           `feature_flag.evaluation.result.dark-mode` attribute with value `"true"`.
         examples: ["red", "true", "3"]
