@@ -25,15 +25,7 @@ This document defines attributes for Feature Flags.
 | <a id="feature-flag-set-id" href="#feature-flag-set-id">`feature_flag.set.id`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | The identifier of the [flag set](https://openfeature.dev/specification/glossary/#flag-set) to which the feature flag belongs. | `proj-1`; `ab98sgs`; `service1/dev` |
 | <a id="feature-flag-version" href="#feature-flag-version">`feature_flag.version`</a> | ![Release Candidate](https://img.shields.io/badge/-rc-mediumorchid) | string | The version of the ruleset used during the evaluation. This may be any stable value which uniquely identifies the ruleset. | `1`; `01ABCDEF` |
 
-**[1] `feature_flag.evaluation.result.<key>`:** This template attribute is intended for use on spans when it is not possible to correlate flag evaluation
-events with their parent span using conventional event-based approaches, such as in stateless span
-processors generating metrics from spans.
-
-The `<key>` MUST be the same value as `feature_flag.key` for the corresponding evaluation.
-The name `feature_flag.evaluation.result` is intentionally distinct from the `feature_flag.result.*`
-attribute family to avoid collisions: a flag literally named `value` or `variant` would otherwise
-produce `feature_flag.result.value` or `feature_flag.result.variant`, colliding with existing defined attributes.
-
+**[1] `feature_flag.evaluation.result.<key>`:** The `<key>` MUST be the same value as `feature_flag.key` for the corresponding evaluation.
 If the feature flag provider supplies a variant or equivalent concept, the variant MUST be used as the
 attribute value. The evaluated flag value SHOULD only be used when no variant is available.
 Non-string flag values (boolean, number, object) MUST be converted to their string representation.
